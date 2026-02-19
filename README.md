@@ -1,10 +1,48 @@
 # M
-M is a mathematics-oriented programming language.<br>
-It is expression-based, function-focused, and compiles to C.<br>
-The compiler is written in Swift.<br>
-`M → Token → AST → C`<br>
-The goal is to build a language that feels like writing mathematics.
+MはSwiftで開発された数学指向のインタプリタ言語です。<br>
+lexerがTokenを生成し、parserがASTを生成し、evaluatorが実行します。<br>
+2進数に変換され実行される数式を記述するために開発されました。
+## 文法
+Mは以下のような文法を持ちます。
 ```
-inc(x) = x + 1
-mout() = inc(0)
+' 四則演算: +, -, *, / '
+' 比較演算: ^, >, < '
+' 論理演算: &, | '
+' 関数定義: f(x) = x '
+' 関数評価: f(0) '
 ```
+変数を定義することはできません。<br>
+定数を要する場合、以下のような関数を定義する必要があります。
+```
+zero() = 0
+```
+分岐処理にはベクトルを使用します。<br>
+Mの真偽値は`!`と`?`です。<br>
+真偽値は実行時に`1`と`0`に変換されます。
+```
+f(cond) = [-128,127][cond]
+f(!) ' 出力: 127 '
+```
+ループ処理をサポートする構文はありません。<br>
+再帰関数を使用してください。
+```
+f(n) = [n*f(n-1),n][n^1]
+f(10) ' 出力: 3628800 '
+```
+Mは高階関数をサポートしています。<br>
+以下のように関数を返す関数を定義できます。
+```
+f(n) = n+1
+g() = f
+g()(0) ' 出力: 1 '
+```
+関数を渡される関数も同様に定義可能です。
+```
+f(n) = n+1
+g(x,y) = x(y)
+g(f,0) ' 出力: 1 '
+```
+## 実行
+1. 実行可能ファイル「m」をダウンロード
+2. Mを記述(ファイル名は任意)
+3. コマンドで実行: `./m m.m`
